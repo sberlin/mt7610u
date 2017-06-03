@@ -1111,15 +1111,12 @@ void SetRfChFreqParametersMT76x0(struct rtmp_adapter *pAd, u8 Channel)
 			RFValue |= pMT76x0_freq_item->pllR32_b4b0;
 			rlt_rf_write(pAd, RF_BANK0, RF_R32, RFValue);
 
-			/* R31<7:5> */
-			rlt_rf_read(pAd, RF_BANK0, RF_R31, &RFValue);
-			RFValue &= ~(0xE0);
-			RFValue |= pMT76x0_freq_item->pllR31_b7b5;
-			rlt_rf_write(pAd, RF_BANK0, RF_R31, RFValue);
+			/* ULLI : write RF_R31 in one go */
 
+			RFValue = 0;
+			/* R31<7:5> */
+			RFValue |= pMT76x0_freq_item->pllR31_b7b5;
 			/* R31<4:0> pll_k(Nominator) */
-			rlt_rf_read(pAd, RF_BANK0, RF_R31, &RFValue);
-			RFValue &= ~(0x1F);
 			RFValue |= pMT76x0_freq_item->pllR31_b4b0;
 			rlt_rf_write(pAd, RF_BANK0, RF_R31, RFValue);
 
