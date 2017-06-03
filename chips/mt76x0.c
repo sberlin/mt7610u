@@ -1153,26 +1153,15 @@ void SetRfChFreqParametersMT76x0(struct rtmp_adapter *pAd, u8 Channel)
 			RFValue |= ((pMT76x0_freq_item->pll_n >> 8) & 0x0001);
 			rlt_rf_write(pAd, RF_BANK0, RF_R30, RFValue);
 
+			/* ULLI : write RF_R28 in one go */
+
 			/* R28<7:6> isi_iso */
-			rlt_rf_read(pAd, RF_BANK0, RF_R28, &RFValue);
-			RFValue &= ~(0xC0);
 			RFValue |= pMT76x0_freq_item->pllR28_b7b6;
-			rlt_rf_write(pAd, RF_BANK0, RF_R28, RFValue);
-
 			/* R28<5:4> pfd_dly */
-			rlt_rf_read(pAd, RF_BANK0, RF_R28, &RFValue);
-			RFValue &= ~(0x30);
 			RFValue |= pMT76x0_freq_item->pllR28_b5b4;
-			rlt_rf_write(pAd, RF_BANK0, RF_R28, RFValue);
-
 			/* R28<3:2> clksel option */
-			rlt_rf_read(pAd, RF_BANK0, RF_R28, &RFValue);
-			RFValue &= ~(0x0C);
 			RFValue |= pMT76x0_freq_item->pllR28_b3b2;
-			rlt_rf_write(pAd, RF_BANK0, RF_R28, RFValue);
-
-			rlt_rf_read(pAd, RF_BANK0, RF_R28, &RFValue);
-			RFValue &= ~(0x3);
+			/* R28<1:0> R27<7:0> R26<7:0> (hex) sdm_k */
 			RFValue |= ((pMT76x0_freq_item->Pll_sdm_k >> 16) & 0x0003);
 			rlt_rf_write(pAd, RF_BANK0, RF_R28, RFValue);
 
