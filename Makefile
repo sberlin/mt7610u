@@ -195,6 +195,14 @@ PWD = $(shell pwd)
 
 RTMP_SRC_DIR = $(PWD)/RT$(MODULE)
 
+RT_NAME = RT2870STA
+
+DAT_FILE = $(RT_NAME).dat
+
+DAT_DIR = /etc/Wireless/$(RT_NAME)
+
+INSTALL_DIR = /usr/lib/$(shell uname -r)/kernel/drivers/net/wireless/$(MODULE)
+
 #PLATFORM: Target platform
 PLATFORM = PC
 
@@ -384,12 +392,25 @@ clean:
 	rm -f Module.markers
 	rm -f modules.order
 
+install:
+	mkdir -p $(DAT_DIR)/
+	cp -n $(DAT_FILE) $(DAT_DIR)/
+	install -d $(INSTALL_DIR)/
+	install -m 644 $(MODULE).ko $(INSTALL_DIR)/
+	/sbin/depmod -a $(shell uname -r)
+
+uninstall:
+	rm -rf $(DAT_DIR) $(INSTALL_DIR)
+	/sbin/depmod -a $(shell uname -r)
+
 installfw:
 	cp -n firmware/* /lib/firmware
 
 help:
 	@echo "options :"
 	@echo "modules		build this module"
+	@echo "install		install module and configuration"
+	@echo "uninstall		uninstall module and configuration"
 	@echo "installfw	install firmware file"
 	@echo "clean		clean"
 	@echo "help		this help text"
